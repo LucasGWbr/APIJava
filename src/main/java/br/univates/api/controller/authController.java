@@ -28,7 +28,8 @@ public class authController {
         Optional<users> user = userRespository.findByEmail(usersDTO.getEmail());
         if(user.isPresent()){
             if (passwordEncoder.matches(usersDTO.getPassword(), user.get().getPassword())) {
-                return ResponseEntity.ok("Login realizado com sucesso!");
+                user.get().setPassword("");
+                return ResponseEntity.ok(user.get());
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("E-mail ou senha inválidos.");
             }
