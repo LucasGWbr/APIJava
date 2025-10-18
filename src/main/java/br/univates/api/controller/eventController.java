@@ -1,5 +1,6 @@
 package br.univates.api.controller;
 
+import br.univates.api.dtos.eventInscriptionDTO;
 import br.univates.api.model.Events;
 import br.univates.api.repositories.eventRepository;
 import org.springframework.http.HttpStatus;
@@ -8,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/events")
 public class eventController {
@@ -28,6 +28,14 @@ public class eventController {
     public ResponseEntity<?> get(@PathVariable(value = "id") int id) {
         if(eventRepository.existsById(id)) {
             return ResponseEntity.status(200).body(eventRepository.findById(id).get());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Id não encontrado");
+    }
+    @GetMapping("/user/{id}")
+    public ResponseEntity<?> getByUser(@PathVariable(value = "id") int id) {
+        List<eventInscriptionDTO> lista = eventRepository.findAllByUserId(id);
+        if(!lista.isEmpty()) {
+            return ResponseEntity.status(200).body(lista);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Id não encontrado");
     }

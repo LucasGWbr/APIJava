@@ -12,10 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/inscription")
 public class inscriptionController {
 
@@ -36,10 +36,16 @@ public class inscriptionController {
         Optional<users> user = userRespository.findById(dto.user());
         Optional<Events> event = eventRepository.findById(dto.event());
         if(user.isPresent() && event.isPresent()) {
-            inscription.setUser_id(user.get().getId());
-            inscription.setEvent_id(event.get().getEventId());
-            inscription temp = inscriptionRepository.save(inscription);
-            return ResponseEntity.status(HttpStatus.CREATED).body(temp);
+            inscription.setUserId(user.get().getId());
+            inscription.setEventId(event.get().getEventId());
+            if(!inscriptionRepository.existsByEventIdAndUserId(inscription.getEventId(),inscription.getUserId())){
+                inscription temp = inscriptionRepository.save(inscription);
+                return ResponseEntity.status(HttpStatus.CREATED).body(temp);
+            }else{
+                inscription = inscriptionRepository.findByEventIdAndUserId(inscription.getEventId(),inscription.getUserId());
+                inscription.setStatus("ACTIVE");
+                return ResponseEntity.status(200).body(inscriptionRepository.save(inscription));
+            }
         }else{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -48,11 +54,20 @@ public class inscriptionController {
     public ResponseEntity<?> get(@PathVariable(value = "id") int id){
         Optional<inscription> inscription = inscriptionRepository.findById(id);
         if(inscription.isPresent()) {
-            inscriptionDTO dto = new inscriptionDTO(inscription.get().getUser_id(),inscription.get().getEvent_id(),inscription.get().getStatus());
+            inscriptionDTO dto = new inscriptionDTO(inscription.get().getUserId(),inscription.get().getEventId(),inscription.get().getStatus());
             return ResponseEntity.status(HttpStatus.OK).body(dto);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<inscription>> getAllPeopleInscription(@PathVariable(value = "id") int id){
+        List<inscription> inscriptions = inscriptionRepository.findAllByuserId(id);
+        if(!inscriptions.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.OK).body(inscriptions);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
     @PatchMapping("/{id}") // Usando PATCH para atualização parcial
     public ResponseEntity<?> updateStatus(

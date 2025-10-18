@@ -17,13 +17,4 @@ public class PasswordEncrypt {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                // 1. Desabilita a proteção CSRF, comum em APIs stateless
-                .csrf(AbstractHttpConfigurer::disable)
-
-                .build();
-    }
 }

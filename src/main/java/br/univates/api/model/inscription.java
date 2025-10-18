@@ -24,10 +24,10 @@ public class inscription {
     private int inscriptionId;
 
     @JoinColumn(name = "user_id")
-    private int user_id;
+    private int userId;
 
     @JoinColumn(name = "event_id")
-    private int event_id;
+    private int eventId;
 
     @Column(name = "status")
     private String status;
