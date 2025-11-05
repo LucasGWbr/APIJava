@@ -1,6 +1,5 @@
 package br.univates.api.controller;
 
-import br.univates.api.config.PasswordEncrypt;
 import br.univates.api.dtos.userDTO;
 import br.univates.api.model.users;
 import br.univates.api.repositories.userRespository;
@@ -10,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -23,10 +24,16 @@ public class userController {
         this.userRespository = userRespository;
     }
 
+
     @GetMapping
-    public String create(){
-        return "ok";
-    };
+    public ResponseEntity<?> getUserByEmail(@RequestParam String email){
+        Optional<users> user = userRespository.findByEmail(email);
+        if(user.isPresent()){
+            return ResponseEntity.status(HttpStatus.OK).body(user.get());
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+    }
 
     @PostMapping
     public ResponseEntity<users> save(@RequestBody userDTO dto) {
@@ -40,4 +47,3 @@ public class userController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 }
-
