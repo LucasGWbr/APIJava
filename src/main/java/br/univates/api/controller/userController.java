@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/user")
 public class userController {
     private final br.univates.api.repositories.userRespository userRespository;
 
