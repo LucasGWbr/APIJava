@@ -46,4 +46,11 @@ public class userController {
         // Retorna o status 201 Created e o usuário salvo no corpo da resposta
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
+    @PutMapping
+    public ResponseEntity<users> update(@RequestBody users user) {
+        String password = user.getPassword();
+        user.setPassword(passwordEncoder.encode(password));
+        users savedUser = userRespository.save(user);
+        return ResponseEntity.ok(savedUser);
+    }
 }
