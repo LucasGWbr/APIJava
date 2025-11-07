@@ -37,7 +37,7 @@ public class eventController {
         if(!lista.isEmpty()) {
             return ResponseEntity.status(200).body(lista);
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Id não encontrado");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id não encontrado");
     }
 
 }
