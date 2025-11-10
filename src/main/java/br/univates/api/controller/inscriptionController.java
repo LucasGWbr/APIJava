@@ -42,9 +42,16 @@ public class inscriptionController {
                 inscription temp = inscriptionRepository.save(inscription);
                 return ResponseEntity.status(HttpStatus.CREATED).body(temp);
             }else{
-                inscription = inscriptionRepository.findByEventIdAndUserId(inscription.getEventId(),inscription.getUserId());
-                inscription.setStatus("ACTIVE");
-                return ResponseEntity.status(200).body(inscriptionRepository.save(inscription));
+                inscription temp = inscriptionRepository.findByEventIdAndUserId(inscription.getEventId(),inscription.getUserId());
+                if(temp.getStatus().equals("PRESENCE")){
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                }
+                if(inscription.getStatus().equals("PRESENCE")){
+                    temp.setStatus("PRESENCE");
+                }else{
+                    temp.setStatus("INSCRIPT");
+                }
+                return ResponseEntity.status(200).body(inscriptionRepository.save(temp));
             }
         }else{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
