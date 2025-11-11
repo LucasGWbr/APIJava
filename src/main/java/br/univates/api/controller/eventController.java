@@ -19,7 +19,7 @@ public class eventController {
         this.eventRepository = eventRepository;
     }
 
-    @GetMapping("")
+    @GetMapping()
     public ResponseEntity<List<Events>> get() {
         List<Events> lista = eventRepository.findAll();
         return ResponseEntity.status(200).body(lista);

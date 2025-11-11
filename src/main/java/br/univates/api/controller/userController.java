@@ -35,18 +35,15 @@ public class userController {
 
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<users> save(@RequestBody userDTO dto) {
         users usuario = new users();
         BeanUtils.copyProperties(dto, usuario);
         usuario.setPassword(passwordEncoder.encode(dto.password()));
         users savedUser = userRespository.save(usuario);
-
-
-        // Retorna o status 201 Created e o usuário salvo no corpo da resposta
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
-    @PutMapping
+    @PutMapping( )
     public ResponseEntity<users> update(@RequestBody users user) {
         String password = user.getPassword();
         user.setPassword(passwordEncoder.encode(password));
