@@ -48,13 +48,8 @@ public class RequestLoggingFilter implements Filter {
         // 2. MUDE AQUI: Calcule o tempo em nanossegundos e converta
         long durationNanos = System.nanoTime() - startTime;
         long timeTaken = durationNanos / 1_000_000;
-        System.out.println(timeTaken);
 
-        // 3. Pegamos os dados do request e response para o log
-        String requestBody = getStringValue(requestWrapper.getContentAsByteArray(), requestWrapper.getCharacterEncoding());
-        String responseBody = getStringValue(responseWrapper.getContentAsByteArray(), responseWrapper.getCharacterEncoding());
-
-        apilogDTO apilogDTO = new apilogDTO(requestWrapper.getMethod(),requestWrapper.getRequestURI(),responseWrapper.getStatus(), responseBody, requestBody, timeTaken);
+        apilogDTO apilogDTO = new apilogDTO(requestWrapper.getMethod(),requestWrapper.getRequestURI(),responseWrapper.getStatus(), timeTaken);
         api_log api = new api_log();
         BeanUtils.copyProperties(apilogDTO, api);
         try{

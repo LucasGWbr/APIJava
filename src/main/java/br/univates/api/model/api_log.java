@@ -26,12 +26,6 @@ public class api_log {
     @Column(name = "status_code")
     private int status;
 
-    @Column(name = "request_body")
-    private String request;
-
-    @Column(name = "response_body")
-    private String response;
-
     @Column
     private long response_time;
 }
