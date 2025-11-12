@@ -38,6 +38,7 @@ public class SecurityConfig {
                         // Libere seus endpoints públicos (login, registrar)
                         .requestMatchers("/auth").permitAll()
                         .requestMatchers("/user/register").permitAll()
+                        .requestMatchers("/user/update").permitAll()
                         .requestMatchers("/events").permitAll()
 
                         // Exija autenticação para todo o resto

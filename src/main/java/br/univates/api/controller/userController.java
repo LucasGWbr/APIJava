@@ -43,7 +43,7 @@ public class userController {
         users savedUser = userRespository.save(usuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
-    @PutMapping( )
+    @PutMapping("/update")
     public ResponseEntity<users> update(@RequestBody users user) {
         String password = user.getPassword();
         user.setPassword(passwordEncoder.encode(password));

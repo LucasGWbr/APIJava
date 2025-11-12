@@ -36,7 +36,5 @@ public class Events {
     @Column(name = "location", nullable = false)
     private String location;
 
-    @Column(name = "certificate_template_path", nullable = false)
-    private String certificateTemplatePath;
 
 }
