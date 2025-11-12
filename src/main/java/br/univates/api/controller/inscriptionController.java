@@ -73,6 +73,8 @@ public class inscriptionController {
         List<inscription> inscriptions = inscriptionRepository.findAllByuserId(id);
         if(!inscriptions.isEmpty()) {
             return ResponseEntity.status(HttpStatus.OK).body(inscriptions);
+        }else if(inscriptions.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }

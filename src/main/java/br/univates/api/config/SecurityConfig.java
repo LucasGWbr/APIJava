@@ -37,8 +37,8 @@ public class SecurityConfig {
                         // ATENÇÃO AQUI:
                         // Libere seus endpoints públicos (login, registrar)
                         .requestMatchers("/auth").permitAll()
-                        .requestMatchers("/user/register").permitAll()
-                        .requestMatchers("/user/update").permitAll()
+                        .requestMatchers("/user").permitAll()
+                        .requestMatchers("/user/*").permitAll()
                         .requestMatchers("/events").permitAll()
 
                         // Exija autenticação para todo o resto
@@ -67,7 +67,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         // 4. Define a origem permitida (o endereço do seu front-end)
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedOrigins(List.of("http://177.44.248.80:5173"));
 
         // 5. Define os métodos HTTP permitidos
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
