@@ -17,8 +17,10 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
+
 @Component
-@Order(1)
+@Order(HIGHEST_PRECEDENCE)
 public class RequestLoggingFilter implements Filter {
 
     // Use o logger padrão do Spring (SLF4J)
@@ -38,19 +40,21 @@ public class RequestLoggingFilter implements Filter {
         ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper((HttpServletRequest) servletRequest);
         ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper((HttpServletResponse) servletResponse);
 
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
 
-        // 1. Deixa a requisição seguir o fluxo normal (chegar no controller, etc.)
+        // Deixa a requisição seguir o fluxo normal
         filterChain.doFilter(requestWrapper, responseWrapper);
 
-        // 2. Agora a requisição já foi processada, temos a resposta
-        long timeTaken = System.currentTimeMillis() - startTime;
+        // 2. MUDE AQUI: Calcule o tempo em nanossegundos e converta
+        long durationNanos = System.nanoTime() - startTime;
+        long timeTaken = durationNanos / 1_000_000;
+        System.out.println(timeTaken);
 
         // 3. Pegamos os dados do request e response para o log
         String requestBody = getStringValue(requestWrapper.getContentAsByteArray(), requestWrapper.getCharacterEncoding());
         String responseBody = getStringValue(responseWrapper.getContentAsByteArray(), responseWrapper.getCharacterEncoding());
 
-        apilogDTO apilogDTO = new apilogDTO(requestWrapper.getMethod(),requestWrapper.getRequestURI(),responseWrapper.getStatus(),requestBody, responseBody,timeTaken);
+        apilogDTO apilogDTO = new apilogDTO(requestWrapper.getMethod(),requestWrapper.getRequestURI(),responseWrapper.getStatus(), responseBody, requestBody, timeTaken);
         api_log api = new api_log();
         BeanUtils.copyProperties(apilogDTO, api);
         try{

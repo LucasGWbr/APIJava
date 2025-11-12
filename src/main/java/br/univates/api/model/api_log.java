@@ -14,6 +14,7 @@ import java.time.OffsetDateTime;
 @Table(name = "api_logs")
 public class api_log {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
@@ -23,14 +24,14 @@ public class api_log {
     private String method;
 
     @Column(name = "status_code")
-    private String status;
+    private int status;
 
     @Column(name = "request_body")
-    private String body;
+    private String request;
 
     @Column(name = "response_body")
     private String response;
 
     @Column
-    private double response_time;
+    private long response_time;
 }
